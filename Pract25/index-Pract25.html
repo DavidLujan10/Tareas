@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding JavaScript's Capture</title>
+</head>
+<body class="Deyvid">
+
+  <div class="uno">
+    <div class="dos">
+      <div class="tres">
+      </div>
+    </div>
+  </div>
+
+<style>
+  html {
+    box-sizing: border-box;
+  }
+  *, *:before, *:after { box-sizing: inherit; }
+
+  div {
+    width:100%;
+    padding:100px;
+  }
+
+  .uno {/*CAPA 1*/
+    background: red;
+  }
+
+  .dos {/*CAPA 2*/
+    background: blue;
+  }
+
+  .tres {/*CAPA 3*/
+    background: yellow;
+  }
+</style>
+
+<button></button>
+<script>
+
+const divs = document.querySelectorAll('div');
+const button = document.querySelector('button');
+
+function logText(e){//NOS DICE EL CUADRO QUE ESTAMOS PRESIONANDO
+  console.log(this.classList.value);
+  e.stopPropagation();//DETIENE LA SECUENCIA O LA PROPAGACION EN EL PRIMER NUMERO QUE PRESIONAMOS
+  //console.log(this);
+}
+
+//document.body.addEventListener('click', logText);//
+
+//divs.forEach(div => div.addEventListener('click', logText));
+divs.forEach(div => div.addEventListener('click', logText, {
+  //capture: true //LOS ACOMODA EN ORDEN ASCENDENTE
+  capture: false, //AQUI LOS ACOMODA EN ORDEN DESCENDENTE
+  //once: true //SOLO PERMITE QUE LO PRESIONEMOS UNA VEZ Y YA NO MAS
+}));
+
+button.addEventListener('click', () =>{
+  console.log('Click!!!');
+}, {
+  //once: true //SOLO PERMITE QUE LO PRESIONEMOS UNA VEZ Y YA NO MAS
+});
+
+
+</script>
+</body>
+</html>
