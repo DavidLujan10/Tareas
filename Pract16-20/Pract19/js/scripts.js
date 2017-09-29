@@ -4,21 +4,21 @@ const ctx = canvas.getContext('2d');
 const strip = document.querySelector('.strip');
 const snap = document.querySelector('.snap');
 
-function getvideo(){
+function getVideo(){
     navigator.mediaDevices.getUserMedia({ video: true, audio: false})
     .then(localMediaStream => {
         console.log(localMediaStream);
         video.src = window.URL.createObjectURL(localMediaStream);
         video.play();
     })
-    .cath(err => {
+    .catch(err => {
         console.error(`ERROR!!`, err);
     });
 }
 
 function paintToCanvas(){
     const width = video.videoWidth;//LA CONSTANTE QUE NOS DA EL ANCHO  DEL CANVAS DEL VIDEO
-    const height = video.videoHeigth;//LA CONSTANTE QUE NOS DA EL ALTO DEL CANVAS DEL VIDEO
+    const height = video.videoHeight;//LA CONSTANTE QUE NOS DA EL ALTO DEL CANVAS DEL VIDEO
     canvas.width = width;//ANCHO  DEL CANVAS DEL VIDEO
     canvas.height = height;//ALTO DEL CANVAS DEL VIDEO
     
@@ -30,37 +30,38 @@ function paintToCanvas(){
         //ES UN LIO AQUI CON ELLOS
         //pixels = redEffect(pixels);
 
-        //pixels = rgbSplit(pixels);
+        pixels = rgbSplit(pixels);
         //ctx.globalAlpha = 0.1; //La propiedad globalAlpha establece o devuelve el valor alfa o de transparencia actual del dibujo.
 
-        pixels = greenScreen(pixels);
+        //pixels = greenScreen(pixels);
 
         //LOS DEVOLVEMOS
         //debugger;
-        ctx.putImage = ctx.getImageData(0, 0, width, height);
+        //ctx.putImage = ctx.getImageData(0, 0, width, height);
+        ctx.putImageData(pixels, 0, 0);
 
     }, 16);
 }
 
 function takePhoto(){
     //TOCABAN LOS SONIDOS
-    snap.currentTime = e;
+    snap.currentTime = 0;
     snap.play();
 
     //SACAMOS LOS DATOS DEL CANVAS
     const data = canvas.toDataURL('image/jpeg');
     const link = document.createElement('a');
     link.href = data;
-    link.setAttribute('download', 'handsome');
-    link.textContent = 'Download Image';
-    link.innerHTML = `<ing scr = "${data}" alt="Handsome Man" />`;
-    strip.insertBefore(link,strip.firstChild);
+    link.setAttribute('download', 'Imagen');
+    //link.textContent = 'Download Image';
+    link.innerHTML = `<img src = "${data}" alt="Handsome Man" />`;
+    strip.insertBefore(link, strip.firsChild);
 
 }
 
 function redEffect(pixels){
     for(let i = 0; i < pixels.data.length; i+=4){
-        pixels.data[i + 0] = pixels.data[i + 0] + 100; //ROJO
+        pixels.data[i + 0] = pixels.data[i + 0] + 200; //ROJO
         pixels.data[i + 1] = pixels.data[i + 1] - 50; //VERDE
         pixels.data[i + 2] = pixels.data[i + 2] * 0.5; //BLUE
     }
@@ -105,7 +106,6 @@ function greenScreen(pixels){
       return pixels;
 }
 
-getvideo();
+getVideo();
 
 video.addEventListener('canplay', paintToCanvas);
-
